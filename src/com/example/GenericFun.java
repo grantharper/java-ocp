@@ -8,9 +8,9 @@ public class GenericFun {
 		void foo();
 	}
 
-	class MyClass implements MyIn<Map> {
+	class MyClass implements MyIn<Map<?,?>> {
 		/*
-		 * this doesn't compile outside of eclipse javac -d bin
+		 * this doesn't compile outside of eclipse if you remove <?, ?> javac -d bin
 		 * src/com/example/GenericFun.java
 		 *
 		 * src\com\example\GenericFun.java:11: error: type argument Map is not
