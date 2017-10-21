@@ -23,6 +23,10 @@ public class InnerClassesExample {
 		public int getFive(){
 			return new InnerClassesExample().five;
 		}
+		
+		public int getSix(){
+			return InnerClassesExample.SIX;
+		}
 	}
 	
 	
