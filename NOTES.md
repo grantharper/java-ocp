@@ -379,9 +379,179 @@ Collectors class provides implementations of Collector
 
 mapped keys contain duplicates, IllegalStateException is thrown
 
+### Day 3
 
+Streams review
 
+For flatMap, it is just oneToMany. You must specify how the mapping is taking place.
+each element produces a stream of elements and then it concatenates at the end
 
+Look at creating a map with streams
+.groupingBy(x)
+.mapping(a, b)
 
+#### Concurrency
 
+Garbage collector is an example of a thread
+Create worker threads using Runnable, Callable, 
+
+Runnable is a functional interface that takes in no data and has not return but is meant to encapsulate thread logic
+
+either extend Thread or implement Runnable to create a thread
+Calling thread.run() does NOT create a NEW thread
+thread.start() does this
+
+thread.sleep(1000) will cause the thread to pause for 1 seconds
+
+implementing runnable is preferable because in extending thread, you are inheriting a lot of 
+
+Thread lifecycle
+New
+Runnable
+Wait
+Time_Waiting
+Blocked
+Terminated
+
+join method joins the thread to the outer thread??
+
+yield() method doesn't guarantee that one thread will yield to another. It hints to the scheduler that the current thread can yield, but it doesn't guarantee.
+you generally shouldn't use this method. Maybe you can use this to help test out a race condition
+
+Creating threads with executorservice
+
+Callable
+
+Future - example of using mutation?
+
+Factory class Executors will give you ExecutorService implementations
+
+ScheduledExecutorService - can schedule tasks after an initial delay or periodically at a fixed rate or at a fixed delay
+fixed rate - every X seconds a new task will kick off
+fixed delay - after each task finishes, it will wait a fixed delay amount before kicking off a new task
+
+Managing Data Access for Concurrency
+Multiple clients accessing the same resource can leave the data in an inconsistent state
+Unexpeceted result of multiple threads executing at the same time known as race condition
+
+stateless - this means the data can never be in an inconsistent state
+immutable objects are nice for this
+
+if two threads read a value at the same time and then increment it, they will assign the value according to what they read
+so for example, some of the increments will be lost
+
+To fix this, we can use atomic classes. These make read, update, write operation atomic (e.g. AtomicInteger) 
+
+Synchonization with locks - prevent thread interference in other operations
+can use synchronization on instance methods and static methods
+synchronized statements - allow you to specify any object on which a thread must acquire a lock before it executes synchronized code
+
+Interface lock - offers added flexibility over implicit locking (synchronized)
+you can declare lock objects in code to manage what threads can access which objects
+Non-blocking attempt to acquire lock (either immediately or after timeout)
+there are methods to ask about the state of the lock
+
+ReentrantLock - two static methods that are synchronized that call each other, it will realize that you already own the lock and let you keep it?
+also has a fairness property to favor threads that have been waiting the longest
+
+ReadWriteLock - has two methods: readLock and writeLock. Multiple threads can have read-only access. Only one thread can have the writeLock at a time.
+You also can't have a readLock when a writeLock is on the object
+
+Volatile - a write to a variable is immediately flushed to main memory and visible to reading threads (this applies to flushing the CPU cache to the main RAM)
+synchronized does not guarantee that the changes by one thread will be visible to the other threads
+This only works when only one thread at a time has write access
+Needs to be used in conjunction synchronized in order to achieve what you actually want
+
+Identifying thread problems
+Deadlock
+both threads are trying to acquire a resource that the other thread has, so they are stuck waiting indefinitely
+
+Livelock - threads constantly block each other from how they behave when lock is unavailable
+
+Starvation - thread is unable to gain regular access to shared resources and make progress. greedy threads
+
+Concurrent Collections
+collections that are accessed by multiple threads - you can use these instead of putting synchronized on the methods yourself
+
+BlockingDeque and BlockingQueue - you can specify an amount of time to wait to perform an operation. for example, remove would wait for an element to be added if it is currently empty
+
+ConcurrentSkipListMap - why is this named SkipList? When you iterate through, instead of going through every element, it will do a smarter search (kind of like binary search)
+
+enhanced for loop uses the iterator behind the scenes. So you cannot add to the list while you are going through it
+If you pull out the iterator, it is a snapshot of the arraylist at that time,  but for a for each, you don't have access to the iterator
+
+CopyOnWrite collections - create a new underlying copy of the data structure that will reflect the change
+
+UnsupportedOperationException - Array.asList(1, 2) when you try to add to this type of list, it is not allowed
+
+ConcurrentModificationException - when you go through foreach loop, the iterator is used behind the scenes, so when you try to add to the list while looping
+
+iterator.remove() removes something from the collection via the iterator
+
+CyclicBarrier
+forces threads to wait for each other to reach a checkpoint before continuing execution
+This barrier can be created with:
+* a threshold number of threads that must reach the barrier to trip it
+* a threshold + a Runnable action that's performed when the barrier is tripped
+barrier.await() allows thread to check-in
+
+Fork Join Framework
+ForkJoinPool is a special type of ExecutorService for running ForkJoinTasks
+RecursiveTask returns a result
+RecursiveAction does not return a result
+
+ForkJoinTask
+fork method returns a new ForkJoinTask
+join method returns a result of the ForkJoinTask when it's all done
+
+need to play with some examples of fork join
+threads in the fork join pool are thread stealing. As soon as it's done with a task, it pulls from the pool
+You can make no assumption about which thread is doing the work. It can steal tasks from another threads taskDeque to avoid thread blocking
+
+Parallel Streams
+keep stream operations independent and stateless
+use forEachOrdered() to enforce ordered terminal operation
+limit the CPUs available to JVM to avoid all cores from being used
+
+#### IO
+
+java.io.File class
+In the context of IO, a stream is not the same as the java streams. It more refers to a stream of data
+The advantage of this stream is that you don't need to store all of the data in-memory
+
+Examples of datasources
+* Files
+* Web sockets
+
+byte streams and character streams
+
+instantiating a File object will not automatically create a file on your file system
+
+File could represent a file or a directory. it is just an abstractions of something that could be on the file system
+mkdirs() - creates directory using the given path, including any necessary but nonexistant parent directories
+
+Reader/Writer --> Character Streams
+InputStream/OutputStream --> Byte Streams
+
+InputStream --> read returns int because you need to be able to tell you are the end of the file (returns -1 at end) If it were returning byte, then it wouldn't be able to signal that it is done
+
+FileOutputStream - you can specify whether to replace or append
+
+flush - in buffered streams, you do a lot of writing that gets stored to a cache before it actually writes to the file. you call this to make sure it gets written to the file
+
+DataStream - write primitives to file in a more performant way
+
+ObjectStream - the object you want to write must be serializable
+could use this to save an object to the disk and then bring it back when a different execution occurs
+
+low level stream --> Reader
+high level stream --> BufferedReader which would act on the low level stream Reader
+
+BufferedWriter - make sure to close() or use try with resources because it implements closable and the resource will automatically close it
+
+PrintWriter and PrintStream don't have a corresponding input class, but usually they come in pairs
+
+Marking a stream - good for re-reading a stream from a position where you marked it. This only works if markSupported() returns true
+
+when marking a stream, it marks it at the location where you are at, not the point you read last
 
