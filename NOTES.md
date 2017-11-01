@@ -550,8 +550,29 @@ high level stream --> BufferedReader which would act on the low level stream Rea
 BufferedWriter - make sure to close() or use try with resources because it implements closable and the resource will automatically close it
 
 PrintWriter and PrintStream don't have a corresponding input class, but usually they come in pairs
+print, write, format, printf - careful about what is accepted. None of these methods throw checked exceptions
+write can't take in a boolean
 
 Marking a stream - good for re-reading a stream from a position where you marked it. This only works if markSupported() returns true
 
 when marking a stream, it marks it at the location where you are at, not the point you read last
+
+
+#### DateTime API
+
+java.time.temporal package
+Temporal Adjusters can be useful for moving around dates in a more human-understandable way
+you can truncate dates to the fields that you care about using ChronoUnit
+
+ZoneOffset is good to know to understand how time shifts into different timezones
+ZonedDateTime, OffsetDateTime, OffsetTime
+ZonedDateTime takes daylight savings time into account, so pay attention to that
+
+Period is toString formatted defined by ISO-8601 format
+P3Y2M1D 3 years, 2 months, 1 day
+
+PT1H24M12S for Duration
+
+UnsupportedTemporalUnitException - could be thrown if you aren't calculating the right difference
+e.g. Duration.between(LocalDate l1, LocalDate l2);
 
