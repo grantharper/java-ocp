@@ -576,3 +576,135 @@ PT1H24M12S for Duration
 UnsupportedTemporalUnitException - could be thrown if you aren't calculating the right difference
 e.g. Duration.between(LocalDate l1, LocalDate l2);
 
+### Day 4
+
+#### NIO.2
+
+Path interface
+Files class
+Stream API
+
+Paths.get this calls the getDefaultFileSystem first
+FileSystem.getPath ?? 
+
+Path resolve(Path other)
+This method could also be named append because it tries to append the Path argument to whatever path you are calling the method from
+If the other directory is an absolute path, it will just return that absolute path
+other is empty, then return this path
+
+Path resolveSibling(Path other) - from the perspective of the parent path
+resolves it to the parent of the given path
+
+Path relativize(Path other)
+constructs relative path between this path and the other path, this is the opposite of resolution
+operates on 2 relative or 2 absolute, but can't mix, otherwise IllegalArg...exception
+Why is this?
+Assumes the same working root directory for 2 relative
+
+relative = zoo.txt
+base1 = ../../temp/delete/dictionary.txt
+base2 = a/b/c/d/e
+base1.relativize
+
+how do we know the arbitrary directories where zoo is relative to 
+relativized1=../../../../../zoo.txt, relativized2=../../../../../zoo.txt, resolved1=temp/delete/dictionary.txt, resolved2=a/b/c/d/e
+
+base1.relativize(relative)
+
+Making decisions about static utility methods versus interface with implementation
+do you really need polymorphic behavior and need to be able to override functionality?
+That can help make the decision between using static methods versus instance methods
+
+copy
+copy_attributes - one that is commone between file systems is the last modified time
+
+isSameFile - only checks paths, not file contents
+isSymbolicLink
+
+Stream methods use cases
+* traverse directory tree
+* listing contents of directory
+* printing file contents
+
+File.walk() depth-first traversal
+overloaded method gives option to specify search depth
+
+Files.find(), must specify search depth, give it a BiPredicate of Path and BasicFileAttributes
+
+File.list(), basically the same as Files.walk with a search depth of 1
+
+Files.readAllLines - loads the entire file in memory, so with large files this can be a problem
+File.lines - lazy loading of lines via Stream<String>
+In almost all cases, you should use File.lines
+
+#### Localization, Exceptions, and Assertions
+
+Internationalization i18n
+Localization l10n
+
+Locale.getDefault(); --> shows you your default Locale
+
+Resource Bundle
+contains locale-specific objects to be used by the program
+
+three ways to do key-value pairing, know all three
+
+Can have a java class be a resource bundle
+can create values of properties at run-time
+can use a value type this is not a String
+
+NumberFormat - use to format numbers given locales
+parser stops when it encounters a non-numeric character it doesn't know how to read
+
+Exceptions Review
+IO, Parsing, SQL exceptions are all checked exceptions
+anything else in unchecked unless the exam specifies otherwise
+
+cannot include subclass and parent class in same multi-catch block
+
+try with resources
+can declare an explicity finally too which will run after the implicity finally resource closing. Also before going to your explicitly stated catch blocks, it will close the resources. The try is self-contained
+
+resources get closed in reverse order to when they were opened. First one opened is the last one closed
+
+Assert keyword
+
+Should read about supressed exceptions
+
+
+#### JDBC
+
+try with resources must implement auto-closeable
+connection statements implement closeable. Because closeable extends auto-closeable, they are eligible for try with resources
+
+ResultSet will always be returned, even if nothing is in it. It will never be returned as null
+
+execute true for select, false for queries returning counts or 0
+executeUpdate, for updates and returns number affected rows
+executeQuery, for selects and returns resultSet
+
+if you pass the wrong thing, you get a SQLException
+
+DriverManager --> Connection --> Statement --> ResultSet
+
+Transactions
+auto-commit mode is enabled by default
+connection.setAutoCommit(false);
+connection.commit();
+connection.rollback();
+
+savepoints
+you can pass these to a rollback to go back to a certain savepoint
+
+RowSet - part of javax.sql
+creates PreparedStatement object to execute a query
+Executes query and returns ResultSet object
+
+Precompiled Statements
+
+PreparedStatement - prevent SQL injection attacks, compiled in the database so they are faster than SQL statements, can include placeholders (?)
+The prepared statement is 1 based, not 0 based
+There is some overhead to initially create it. If you only use it once it is no more performant
+
+CallableStatement
+Used to call stored procedures in the database

@@ -62,42 +62,42 @@ public class ConcurrencyExercise {
 
 	public static void main(String[] args) {
 		ConcurrencyExercise ce = new ConcurrencyExercise();
-		System.out.println("1 - Not Sync, 2 - Sync, 3 - Locked, 4 - Atomic");
+		System.out.println("1 - Not Sync, 2 - Sync, 3 - Locked, 4 - Atomic, 0 - Quit");
 		String option = "1";
-		try {
+		try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+			while (true) {
+				System.out.print("Enter which option you would like to simulate\n");
+				option = br.readLine();
 
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			System.out.print("Enter which option you would like to simulate\n");
-			option = br.readLine();
-			
-			if (option.equals("1")) {
-				System.out.println("Not synchronized");
-				ce.notSynchronized();
-			}
+				if (option.equals("1")) {
+					System.out.println("Not synchronized");
+					ce.notSynchronized();
+				}
 
-			if (option.equals("2")) {
-				System.out.println("Synchronized");
-				ce.synchronizedExample();
-			}
+				if (option.equals("2")) {
+					System.out.println("Synchronized");
+					ce.synchronizedExample();
+				}
 
-			if (option.equals("3")) {
-				System.out.println("Locked");
-				ce.lockExample();
-			}
+				if (option.equals("3")) {
+					System.out.println("Locked");
+					ce.lockExample();
+				}
 
-			if (option.equals("4")) {
-				System.out.println("Atomic");
-				ce.atomicExample();
+				if (option.equals("4")) {
+					System.out.println("Atomic");
+					ce.atomicExample();
+				}
+
+				if (option.equals("0")) {
+					System.out.println("Quitting");
+					break;
+				}
+
 			}
-			
 		} catch (IOException e) {
 			e.printStackTrace();
-		}finally{
-			System.exit(0);
-		}
-
-		
-		//System.exit(0);
+		} 
 	}
 
 	public void incrementNotSynchronized(String id) {
@@ -115,11 +115,13 @@ public class ConcurrencyExercise {
 	public void incrementWithLock(String id) {
 		System.out.println(id);
 		try {
-			if (lock.tryLock(100000, TimeUnit.NANOSECONDS)) { // if you change the
-															// time, it will
-															// change how many
-															// threads can
-															// access
+			if (lock.tryLock(100000, TimeUnit.NANOSECONDS)) { // if you change
+																// the
+																// time, it will
+																// change how
+																// many
+																// threads can
+																// access
 				a++;
 				printA();
 
