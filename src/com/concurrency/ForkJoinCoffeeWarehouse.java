@@ -8,7 +8,8 @@ import java.util.concurrent.RecursiveAction;
 
 public class ForkJoinCoffeeWarehouse extends RecursiveAction {
 
-	private int start;
+  private static final long serialVersionUID = 3893370181018250694L;
+  private int start;
 	private int end;
 	private Double[] weights;
 
@@ -21,6 +22,7 @@ public class ForkJoinCoffeeWarehouse extends RecursiveAction {
 	@Override
 	protected void compute() {
 		if (end - start <= 3) {
+		  System.out.println("Small enough task: start=" + start + " end=" + end);
 			// perform task
 			for (int i = start; i < end; i++) {
 				weights[i] = (double) new Random().nextInt(100);
@@ -29,7 +31,7 @@ public class ForkJoinCoffeeWarehouse extends RecursiveAction {
 		} else {
 			// fork task
 			int middle = start + (end - start) / 2;
-			System.out.println("start=" + start + "middle=" + middle + "end=" + end);
+			System.out.println("Large task to split: start=" + start + " middle=" + middle + " end=" + end);
 			invokeAll(new ForkJoinCoffeeWarehouse(start, middle, weights),
 					new ForkJoinCoffeeWarehouse(middle, end, weights));
 		}
@@ -37,10 +39,10 @@ public class ForkJoinCoffeeWarehouse extends RecursiveAction {
 	}
 
 	public static void main(String[] args) {
-		Double[] weights = new Double[50];
+		Double[] weights = importCoffee();
 
 		ForkJoinTask<?> task = new ForkJoinCoffeeWarehouse(0, weights.length, weights);
-		ForkJoinPool pool = new ForkJoinPool();
+		ForkJoinPool pool = new ForkJoinPool(1);
 
 		pool.invoke(task);
 
@@ -48,6 +50,16 @@ public class ForkJoinCoffeeWarehouse extends RecursiveAction {
 		System.out.println("Weights: ");
 		Arrays.asList(weights).stream().forEach(d -> System.out.print(d.intValue() + " "));
 
+	}
+	
+	private static final int COFFEE_IMPORT_SIZE = 10;
+	
+	public static Double[] importCoffee(){
+	  Double[] weights = new Double[COFFEE_IMPORT_SIZE];
+	  for (int i = 0; i < COFFEE_IMPORT_SIZE; i++) {
+      weights[i] = (double) new Random().nextInt(100);
+    }
+	  return weights;
 	}
 
 }
