@@ -33,4 +33,13 @@ Callable is not instanceof Runnable
 Pass runnable to a thread constructor to run in a new thread
 
 
+Any object can be a monitor
+
+Exception in the try block always wins, not the exception in the close method
+
+
+FileSystem.getPathMatcher - check out this method and globbing
+
+what does the put method return for HashMap under various circumstances
+
 

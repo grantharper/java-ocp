@@ -8,7 +8,7 @@ public class NoGenericExample
 
   public static void main(String[] args)
   {
-    List list = new ArrayList<>(); //list of objects
+    List<Object> list = new ArrayList<>(); //list of objects
     
     list.add("String");
     list.add(12);
