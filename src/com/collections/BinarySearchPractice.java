@@ -26,6 +26,15 @@ public class BinarySearchPractice
     
     result = Collections.binarySearch(integerList, 1);
     System.out.println(result);
-  }
+    
+    
+    Collections.sort(integerList);
+    //if not found, returns (-(insertionPoint) -1) where insertion point is where the key would be inserted (index of first element greater than the key or length of array if it would be the greatest element)
+    result = Collections.binarySearch(integerList, 3); //belongs at index 1 so will yield -2
+    System.out.println("3 belongs at index 1 so will yield: " + result);
+    
+    result = Collections.binarySearch(integerList, 9); //belongs at index 3, so will yield -5
+    System.out.println("9 belongs at index 4 (size of array), so will yield: "+ result);
   
+  } 
 }

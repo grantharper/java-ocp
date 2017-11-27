@@ -3,6 +3,10 @@ package com.assertions;
 public class AssertionsAreDumb {
 
 	//in order for this to work, the run configurations need to pass -ea as a VM argument (to enable assertions)
+  //to enable assertions for a specific package: -ea:package...
+  //to enable assertions for a specific class: -ea:class
+  //each command modifies the one before it: -ea -da:disabledclass would enable assertions globally but disable them for a given class
+  //subpackages are affected by these flags for a parent package
 	public static void main(String[] args) {
 		
 		Square s1 = new Square(1, 2);
