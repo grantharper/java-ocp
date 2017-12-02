@@ -21,7 +21,7 @@ public class FileSystemInteraction {
 					.forEach(System.out::println);
 			
 			System.out.println("Find the current file executing this program");
-			Files.find(Paths.get(""), 10, (p, a) -> p.toString().endsWith("FileSystemInteraction.java")).forEach(System.out::println);;
+			Files.find(Paths.get(""), 10, (p, a) -> p.toString().endsWith("FileSystemInteraction.java") && a.isRegularFile()).forEach(System.out::println);;
 			
 			System.out.println("List all java files in this project");
 			Files.walk(Paths.get("")).filter(s -> s.toString().endsWith(".java")).forEach(a -> System.out.print(a + ";"));
