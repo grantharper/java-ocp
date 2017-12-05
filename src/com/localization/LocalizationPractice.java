@@ -8,7 +8,9 @@ public class LocalizationPractice
 {
 
   public static void main(String[] args)
-  {
+  { 
+    Locale notUsedLocale = new Locale("blah", "fakeCountry");
+    System.out.println("fakeLocale=" + notUsedLocale);
     String baseName = "messages";
     Locale locale = Locale.getDefault();
     System.out.println("Local.getDefault()=" + locale);

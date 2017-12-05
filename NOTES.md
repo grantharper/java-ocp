@@ -209,6 +209,7 @@ Collections are NOT thread safe
 
 You can have a map of maps, but the key cannot be the same map
 
+sublist returns a list backed by the original list, so changes made to this list will be reflected in the original list
 
 Maps
 KeySet

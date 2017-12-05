@@ -7,6 +7,10 @@ public class AssertionsAreDumb {
   //to enable assertions for a specific class: -ea:class
   //each command modifies the one before it: -ea -da:disabledclass would enable assertions globally but disable them for a given class
   //subpackages are affected by these flags for a parent package
+  
+  //Assertions require changes at the API level.
+  //Code written for JDK version 1.3 can be compiled by later versions by using -source flag: javac -source 1.3 classname.java
+  
 	public static void main(String[] args) {
 		
 		Square s1 = new Square(1, 2);
