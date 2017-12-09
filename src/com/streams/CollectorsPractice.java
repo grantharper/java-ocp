@@ -32,6 +32,8 @@ public class CollectorsPractice
     double averagePrice = beers.stream().collect(Collectors.averagingDouble(Beer::getPrice));
     System.out.println("average price=" + averagePrice);
     
+    List<String> beerNames = beers.stream().collect(Collectors.mapping(Beer::getName, Collectors.toList()));
+    System.out.println("beer names=" + beerNames);
   }
   
   private Function<String, Beer> beerCreator = Beer::new;

@@ -22,6 +22,14 @@ public class AssertionsAreDumb {
 		assert s2.verify();
 	}
 	
+	public void pubSome(int port){
+	  assert port > 90;
+	  //invalid use of assertions since you shouldn't validate input parameters to public methods
+	}
+	
+	private void privSome(int port){
+	  assert port < 90; //valid assertion since this is ok for a private method.
+	}
 	
 }
 

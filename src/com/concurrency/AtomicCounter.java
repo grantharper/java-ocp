@@ -21,6 +21,9 @@ public class AtomicCounter
     a.set(2);
     System.out.println("after set(2)=" + a.get());
     
+    a.compareAndSet(2, 4);
+    System.out.println("after compareAndSet(2,4) (expects 2, if true, update to 4): " + a.get());
+    
   }
   
 }

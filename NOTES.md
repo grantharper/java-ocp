@@ -43,7 +43,7 @@ Inner classes (non-static nested class)
 * anonymous inner class to pass as an argument to a method
 * static nested class???
 
-Static nested class - treated as basically a separate top level class??
+Static nested class - treated as basically a separate top level class
 
 Collections
 * push - adds to front
@@ -74,9 +74,6 @@ Contract
 The Java Collections API assumes you are observing these rules
 
 It is common to multiply by prime numbers when combining multiple fields to help make the hashCode more unique
-
-
-You can define ambiguous methods (implement methods or use static variables from different interfaces with the same name), however, when you actually refer to them, you will get a compile-time exception.
 
 Enums
 Java's version of singleton class
@@ -116,7 +113,7 @@ Type Safety! Can make run-time issues appear at compile-time.
 
 Generic Limitations - cannot call the constructor because of type erasure issues. Can't create an array of the generic type. instanceof will also fail. Can't use primitive types as your generic type parameter. Can't create a static variable as a generic type parameter.
 
-Formal type parameter rules. You must put <T> for the static method, otherwise it will assume you are importing a class named T instead of assuming generic usage.
+Formal type parameter rules. You must put <T> for the method if not defined as a generic at the class level, otherwise it will assume you are importing a class named T instead of assuming generic usage.
 
 Wildcards means that it can be any type. Formal Type <T, T> guarantees that you have two of the same type. Wildcard <?, ?> makes it possible to have different types.
 
@@ -177,7 +174,7 @@ as soon as insertion happens, it rearranges the set.
 returned set will throw IllegalArugumentException on an attempt to insert an element oustide its range
 
 The exam will try to put objects into a NavigableSet that don't implement Comparable
-This will result in a 
+This will result in a ClassCastException
 
 Comparable
 a.compareTo(b)
@@ -251,9 +248,9 @@ Can't have a static method and an instance method with the same signature??
 
 Common Functional Interfaces
 * Predicate T -> boolean
-* Consumer T-> void
+* Consumer T -> void
 * Function T-> R
-* Supplier 
+* Supplier () -> R
 
 There are primitive versions of functional interfaces which avoid autoboxing inputs and outputs. Naming convention example below.
 None of the functional interfaces allow for a checked exception to be thrown
@@ -261,7 +258,7 @@ None of the functional interfaces allow for a checked exception to be thrown
 * IntFunction int -> T
 * IntToLongFunction int -> long
 
-Versions of functional interfaces that take more parameters. BiPredicate for example takes two parameters and returns a 
+Versions of functional interfaces that take more parameters. BiPredicate for example takes two parameters and returns a boolean
 
 Type Checking
 type of lambda is deduced from context
@@ -281,14 +278,13 @@ you are defining the implementation of the functional interface
 
 String::length - will refer to arbitrary object that is passed in and call its instance method
 instanceOfPerson::getName - will refer to the provided instance and call getName()
-ClassName::new
+ClassName::new - calls the constructor
 
 generics on left hand side will determine what the method reference will actually invoke
 Function<Integer, Apple> c2 = Apple::new;
 Apple a2 = c2.apply(110);
 
 to call a no-arg constructor, you could use a supplier
-Try this out??
 
 These methods all return Comparator for chaining (basically the builder pattern)
 comparing is a default method in comparator to allow for the comparator to zero in on one particular field
@@ -404,7 +400,7 @@ thread.start() does this
 
 thread.sleep(1000) will cause the thread to pause for 1 seconds
 
-implementing runnable is preferable because in extending thread, you are inheriting a lot of 
+implementing runnable is preferable because in extending thread, you are inheriting a lot of extra functionality you don't need
 
 Thread lifecycle
 New
@@ -457,6 +453,8 @@ also has a fairness property to favor threads that have been waiting the longest
 
 ReadWriteLock - has two methods: readLock and writeLock. Multiple threads can have read-only access. Only one thread can have the writeLock at a time.
 You also can't have a readLock when a writeLock is on the object
+
+From a ReadWriteLock, you can get one read lock (by calling lock.readLock() ) and one write lock (by calling lock.writeLock() ). Even if you call these methods multiple times, the same lock is returned. A read lock can be locked by multiple threads simultaneously (by calling lock.readLock().lock() ), if the write lock is free. If the write lock is not free, a read lock cannot be locked. The write lock can be locked (by calling lock.writeLock().lock() ) only by only one thread and only when no thread already has a read lock or the write lock. In other words, if one thread is reading, other threads can read, but no thread can write. If one thread is writing, no other thread can read or write.
 
 Volatile - a write to a variable is immediately flushed to main memory and visible to reading threads (this applies to flushing the CPU cache to the main RAM)
 synchronized does not guarantee that the changes by one thread will be visible to the other threads
@@ -627,15 +625,16 @@ Stream methods use cases
 * listing contents of directory
 * printing file contents
 
-File.walk() depth-first traversal
+Files.walk() depth-first traversal
 overloaded method gives option to specify search depth
 
 Files.find(), must specify search depth, give it a BiPredicate of Path and BasicFileAttributes
+Files.find(Path p1, Integer depth, BiPredicate<Path, BasicFileAttributes> bp)
 
-File.list(), basically the same as Files.walk with a search depth of 1
+Files.list(), basically the same as Files.walk with a search depth of 1
 
 Files.readAllLines - loads the entire file in memory, so with large files this can be a problem
-File.lines - lazy loading of lines via Stream<String>
+Files.lines - lazy loading of lines via Stream<String>
 In almost all cases, you should use File.lines
 
 #### Localization, Exceptions, and Assertions

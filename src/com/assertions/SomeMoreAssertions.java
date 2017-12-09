@@ -8,6 +8,8 @@ public class SomeMoreAssertions
     assert true: "I just asserted true which is dead code";
     
     assert false: "I just asserted false which is totally allowed";
+  
+
   }
   
 }

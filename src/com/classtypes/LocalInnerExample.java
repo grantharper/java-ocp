@@ -1,5 +1,7 @@
 package com.classtypes;
 
+import com.classtypes.StaticClassesExample.StaticNested;
+
 public class LocalInnerExample {
 
 	private int instanceVar = 10;
@@ -34,4 +36,10 @@ public class LocalInnerExample {
 		
 		
 	}
+	
+	public static void main(String[] args)
+  {
+    StaticNested sn = new StaticNested(); //you can access StaticNested without qualifying it within the same package
+    
+  }
 }

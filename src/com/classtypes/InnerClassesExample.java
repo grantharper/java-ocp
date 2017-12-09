@@ -12,6 +12,7 @@ public class InnerClassesExample
     // static int two = 2; // DOES NOT COMPILE because it is not final
     private int three = 3;
 
+    //private static int getsomething(){return 1;} //DOES NOT COMPILE because static for inner classes is not allowed
     int four = 4;
 
     private int getThree()

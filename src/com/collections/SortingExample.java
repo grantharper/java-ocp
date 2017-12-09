@@ -50,6 +50,14 @@ public class SortingExample implements Comparable<SortingExample>, Comparator<So
 
     TreeSet<String> treeSet = (TreeSet<String>) sortingSet;
     System.out.println(treeSet.ceiling("On"));
+    
+    
+    TreeSet badOne = new TreeSet<>();
+    badOne.add(new SortingExample(1, "a").new NotComparable()); //not comparable so will throw ClassCastException
+  }
+  
+  class NotComparable{
+    
   }
 
   @Override
